@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block body %}
+<form action='kyc'  method="POST" enctype="multipart/form-data" >
+    {% csrf_token %}
+     <h4><b>Welcome </b></h4>
+  <table>
+    <tr>
+        <td> <input type="text" name="username" placeholder="Enter your name" style="width:350px;" required></td>
+    </tr>
+
+ <tr>
+        <td>   <input type="number" name="dob" placeholder="Age" style="width:350px;" required></td>
+    </tr>
+  <tr>
+        <td>    <input type="number" name="mobileno" placeholder="Phone number" style="width:350px;" required></td>
+    </tr>
+     <tr>
+
+        <td>     <input type="email" name="email" placeholder="email id" style="width:350px;" required></td>
+    </tr>
+     <tr>
+
+        <td>     <input type="text" name="address" placeholder="address" style="width:350px;" required></td>
+    </tr>
+<tr>
+
+        <td> DOB <input type="date" placeholder="DOB" style="width:317px;" required></td>
+    </tr>
+
+<tr>
+    <th>
+ <select  id="country-dropdown" class="form-control" style="width:350px;height:30px;">
+                            <option value="">-- Select District --</option>
+                            {% for country in countries %}
+                                <option value="{{country.id}}">
+                                    {{country.name}}
+                                </option>
+                            {% endfor %}
+                        </select></th></tr><tr>
+    <td>
+                       <select id="state-dropdown" class="form-control" style="width:350px;height:30px;">
+                        </select>
+
+    </td>
+</tr>
+
+
+<tr>
+
+        <td>   <select style="width:350px;height:30px;">
+            <option>Select Account Type </option>
+    <option>Savings account</option>
+    <option>fixed account</option>
+      <option>current account</option>
+  </select></td>
+    </tr>
+
+ <tr>
+  <td>Documents : <input type="checkbox" value="Debit"> Debit card
+     <input type="checkbox" value="Debit"> Credit card
+   <input type="checkbox" value="Debit"> Cheque Book </td>
+ </tr>
+<tr>
+   <th><input type="submit" style="width:150px; background-color:#fd7e14;">
+     <button style="width:150px; height:35px; background-color:#fd7e14;"><a href="{% url 'home' %}">Logout</a></button>
+   </th>
+<!--    <input type="button" value="logout" style="width:150px; background-color:#fd7e14;" ><a href=" {% url 'home' %}"></a>-->
+ </tr>
+
+    </table>
+</form>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            /*------------------------------------------
+            --------------------------------------------
+            Country Dropdown Change Event
+            --------------------------------------------
+            --------------------------------------------*/
+            $('#country-dropdown').on('change', function () {
+                var idCountry = this.value;
+                $("#state-dropdown").html('');
+                $.ajax({
+                    url: "{% url 'fetch_state' %}",
+                    type: "POST",
+                    headers: {
+                        "X-CSRFTOKEN": "{{ csrf_token }}"
+                    },
+                    data: {
+                        country_id: idCountry,
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#state-dropdown').html('<option value="">-- Select Branch --</option>');
+                        $.each(result.states, function (key, value) {
+                            $("#state-dropdown").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                        $('#city-dropdown').html('<option value="">-- Select City --</option>');
+                    }
+                });
+            });
+
+
+
+        });
+    </script>
+{% endblock%}
+

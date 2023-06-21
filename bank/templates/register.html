@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block body %}
+  <div class="wrapper">
+    <div style="font-color:red;">
+       {% for msg in messages%}
+      <strong style="color:red;">{{msg}}</strong>
+    {% endfor %}
+    </div>
+
+    <h2>Registration</h2>
+    <form action="register" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="field">
+        <input type="text" name='name' placeholder="Enter your name" style="width:350px;" required>
+      </div>
+        <div class="field">
+        <input type="password" name='password' placeholder="Create password" style="width:350px;" required>
+      </div>
+      <div class="field">
+        <input type="password" name='cpassword' placeholder="Confirm password" style="width:350px;" required>
+      </div>
+
+      <div class="field">
+        <input type="Submit" value="Register Now" style="width:150px; background-color:#fd7e14;">
+             </div>
+
+    </form>
+
+  </div>
+
+{% endblock%}
